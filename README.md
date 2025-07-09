@@ -2,4 +2,8 @@
 
 every football web app.
 
-## todo
+## v 1.0.0
+
+- [x] main web view.
+- [ ] app icon.
+- [ ] splash.
