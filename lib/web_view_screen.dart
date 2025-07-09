@@ -1,4 +1,6 @@
+import 'package:every_football/data/const.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class WebViewScreen extends StatefulWidget {
@@ -14,12 +16,30 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
     return Scaffold(
+      backgroundColor: bgColor,
       body: SafeArea(
-        child: InAppWebView(
-          key: webViewKey,
-          initialUrlRequest: URLRequest(
-            url: WebUri("https://every-football.beaowl.xyz/"),
+        bottom: false,
+        child: Container(
+          color: bgColor,
+          child: Column(
+            children: [
+              Expanded(
+                child: InAppWebView(
+                  initialSettings: InAppWebViewSettings(
+                    transparentBackground: true,
+                  ),
+                  key: webViewKey,
+                  initialUrlRequest: URLRequest(url: WebUri(webUrl)),
+                ),
+              ),
+              Container(
+                height: MediaQuery.of(context).padding.bottom, // 제스처 바 높이만큼
+                color: bgColor, // 제스처 바 배경색처럼 보이게
+              ),
+            ],
           ),
         ),
       ),
