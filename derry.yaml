@@ -1,0 +1,14 @@
+# dev
+# dev: flutter run --dart-define-from-file="env/development.env"
+dev: flutter run
+
+# build
+build: derry build_ios && derry build_android
+# build_ios: flutter build ipa --dart-define-from-file="env/production.env"
+build_ios: flutter build ipa
+# build_android: flutter build appbundle --release --no-tree-shake-icons --dart-define-from-file="env/production.env"
+build_android: flutter build appbundle
+
+# release
+release: flutter run --release --dart-define-from-file="env/production.env"
+release_dev: flutter run --release --dart-define-from-file="env/development.env"

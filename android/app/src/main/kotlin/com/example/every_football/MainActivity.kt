@@ -1,4 +1,4 @@
-package com.example.every_football
+package xyz.beaowl.every_football
 
 import io.flutter.embedding.android.FlutterActivity
 
