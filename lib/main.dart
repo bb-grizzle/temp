@@ -14,7 +14,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Every Football',
       theme: ThemeData(scaffoldBackgroundColor: Color(0xff282828)),
       home: const WebViewScreen(),
     );

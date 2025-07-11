@@ -3,9 +3,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="every_football"
+        android:label="에브리풋볼"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/launcher_icon"
+        android:usesCleartextTraffic="true"
+    >
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -37,7 +37,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
               ),
               Container(
                 height: MediaQuery.of(context).padding.bottom, // 제스처 바 높이만큼
-                color: bgColor, // 제스처 바 배경색처럼 보이게
+                color: Colors.transparent,
               ),
             ],
           ),
