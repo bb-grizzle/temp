@@ -57,5 +57,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<!-- ignore france encrytion :start -->
+	<key>ITSAppUsesNonExemptEncryption</key> 
+	<No>
+	<!-- ignore france encrytion :end -->
 </dict>
 </plist>

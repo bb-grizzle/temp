@@ -85,9 +85,19 @@ end
 # This method will get the latest build number from the app store and increment it by 1.
 # Ensure authenticate_apple_store is called before this method
 def get_build_number(store)
+  app_store_connect_api_key(
+    key_id: ENV["ASC_KEY_ID"],
+    issuer_id: ENV["ASC_ISSUER_ID"],
+    key_content: ENV["ASC_KEY_P8_BASE64"],
+    is_key_content_base64: true,
+    in_house: false
+  )
+
   return get_new_build_number(
-    bundle_identifier: store == "appstore" ? ENV["APP_BUNDLE_ID"] : nil,
-    package_name: store == "playstore" ? ENV["APP_PACKAGE_NAME"] : nil,
+    bundle_identifier: ENV["APP_BUNDLE_ID"],
+    # bundle_identifier: store == "appstore" ? ENV["APP_BUNDLE_ID"] : nil,
+    package_name: ENV["APP_PACKAGE_NAME"],
+    # package_name: store == "playstore" ? ENV["APP_PACKAGE_NAME"] : nil,
     google_play_json_key_path: google_service_account_json_path
   ).to_s
 end

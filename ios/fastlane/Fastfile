@@ -48,7 +48,7 @@ platform :ios do
 
     # Verify version number is correct
     if !is_ci && (!options[:version_number])
-      continue = UI.confirm("Deploying version #{version_number} (from pubspec.yaml) to App Store. Continue?")
+      continue = UI.confirm("Deploying version #{version_number}+#{build_number} (from pubspec.yaml) to App Store. Continue?")
 
       unless continue
         UI.user_error!("Aborted")
