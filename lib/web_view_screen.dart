@@ -2,9 +2,12 @@ import 'package:every_football/data/const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:geolocator/geolocator.dart';
 
 class WebViewScreen extends StatefulWidget {
-  const WebViewScreen({super.key});
+  final Position? position;
+
+  const WebViewScreen({super.key, this.position});
 
   @override
   State<WebViewScreen> createState() => _WebViewScreenState();
@@ -13,6 +16,15 @@ class WebViewScreen extends StatefulWidget {
 class _WebViewScreenState extends State<WebViewScreen> {
   final GlobalKey webViewKey = GlobalKey();
   double progress = 0;
+
+  String get _webUrlWithLocation {
+    if (widget.position != null) {
+      final lat = widget.position!.latitude;
+      final lng = widget.position!.longitude;
+      return '$webUrl?lat=$lat&lng=$lng';
+    }
+    return webUrl;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +44,9 @@ class _WebViewScreenState extends State<WebViewScreen> {
                     transparentBackground: true,
                   ),
                   key: webViewKey,
-                  initialUrlRequest: URLRequest(url: WebUri(webUrl)),
+                  initialUrlRequest: URLRequest(
+                    url: WebUri(_webUrlWithLocation),
+                  ),
                 ),
               ),
               Container(
