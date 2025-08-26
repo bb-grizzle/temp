@@ -27,9 +27,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   Future<void> _checkLocationPermissionAndGetLocation() async {
     try {
-      print('위치 권한 요청 중...');
       PermissionStatus status = await Permission.location.request();
-      print('위치 권한 요청 결과: ${status.name}');
 
       setState(() {
         locationPermissionGranted = status.isGranted;
@@ -38,32 +36,24 @@ class _WebViewScreenState extends State<WebViewScreen> {
       // 권한이 허용된 경우에만 위치 정보 가져오기
       if (status.isGranted) {
         try {
-          print('위치 정보 가져오는 중...');
           final currentPosition = await Geolocator.getCurrentPosition();
 
           setState(() {
             position = currentPosition;
             isLoading = false;
           });
-
-          print(
-            '위치 정보 획득: lat: ${currentPosition.latitude}, lng: ${currentPosition.longitude}',
-          );
         } catch (e) {
-          print('위치 정보를 가져올 수 없습니다: $e');
           setState(() {
             isLoading = false;
           });
         }
       } else {
         // 권한이 거부된 경우
-        print('위치 권한이 거부되었습니다.');
         setState(() {
           isLoading = false;
         });
       }
     } catch (e) {
-      print('권한 확인 중 오류 발생: $e');
       setState(() {
         isLoading = false;
       });
@@ -74,10 +64,8 @@ class _WebViewScreenState extends State<WebViewScreen> {
     if (locationPermissionGranted && position != null) {
       final lat = position!.latitude;
       final lng = position!.longitude;
-      print('쿼리파라미터 추가: lat=$lat&lng=$lng');
       return '$webUrl?lat=$lat&lng=$lng';
     } else {
-      print('쿼리파라미터 없이 기본 URL 사용');
       return webUrl;
     }
   }
