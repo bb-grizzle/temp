@@ -75,22 +75,46 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
     if (isLoading) {
       return Scaffold(
-        backgroundColor: bgColor,
+        backgroundColor: Color(0xFF2B2B2B),
         body: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          child: Column(
+            children: [
+              // 상단 헤더
+              Container(
+                height: 48,
+                width: double.infinity,
+                color: Color(0xFF2B2B2B),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 16),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Image.asset(
+                      'assets/logo/logo-title.png',
+                      height: 32,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
-                SizedBox(height: 20),
-                Text(
-                  '위치 정보를 확인하고 있습니다...',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              // 로딩 컨텐츠
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        '위치 정보를 확인하고 있습니다...',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
