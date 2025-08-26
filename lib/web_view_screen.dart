@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'dart:developer';
 
 class WebViewScreen extends StatefulWidget {
   const WebViewScreen({super.key});
