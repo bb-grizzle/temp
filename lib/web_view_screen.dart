@@ -137,6 +137,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   initialUrlRequest: URLRequest(
                     url: WebUri(_webUrlWithLocation),
                   ),
+                  shouldOverrideUrlLoading: (controller, navigationAction) async => NavigationActionPolicy.ALLOW,
                 ),
               ),
               Container(
