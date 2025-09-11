@@ -15,6 +15,7 @@ class WebViewScreen extends StatefulWidget {
 
 class _WebViewScreenState extends State<WebViewScreen> {
   final GlobalKey webViewKey = GlobalKey();
+  InAppWebViewController? webViewController;
   Position? position;
   bool locationPermissionGranted = false;
   bool isLoading = true;
@@ -117,15 +118,56 @@ class _WebViewScreenState extends State<WebViewScreen> {
               Expanded(
                 child: InAppWebView(
                   initialSettings: InAppWebViewSettings(
+                    // 성능 최적화 설정
                     transparentBackground: true,
+                    javaScriptEnabled: true,
+                    domStorageEnabled: true,
+                    databaseEnabled: true,
+                    clearCache: false,
+                    cacheEnabled: true,
+                    // 로딩 최적화
+                    useOnLoadResource: false,
+                    useShouldOverrideUrlLoading: true,
+                    useOnDownloadStart: false,
+                    // 렌더링 최적화
+                    hardwareAcceleration: true,
+                    // window.open 최적화
+                    supportMultipleWindows: true,
+                    javaScriptCanOpenWindowsAutomatically: true,
+                    // 유저 에이전트 설정
+                    userAgent:
+                        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+                    // 추가 성능 설정
+                    mediaPlaybackRequiresUserGesture: false,
+                    allowsInlineMediaPlayback: true,
+                    iframeAllow: "camera; microphone",
+                    iframeAllowFullscreen: true,
                   ),
                   key: webViewKey,
                   initialUrlRequest: URLRequest(
                     url: WebUri(_webUrlWithLocation),
                   ),
+                  onWebViewCreated: (controller) {
+                    webViewController = controller;
+                  },
                   shouldOverrideUrlLoading:
                       (controller, navigationAction) async =>
                           NavigationActionPolicy.ALLOW,
+                  onLoadStart: (controller, url) {
+                    // 로딩 시작 시 추가 처리 없음
+                  },
+                  onLoadStop: (controller, url) {
+                    // 로딩 완료 시 추가 처리 없음
+                  },
+                  onCreateWindow: (controller, createWindowAction) async {
+                    // window.open 이벤트 처리 - 새 창을 현재 WebView에서 열기
+                    await controller.loadUrl(
+                      urlRequest: URLRequest(
+                        url: createWindowAction.request.url,
+                      ),
+                    );
+                    return true;
+                  },
                 ),
               ),
               Container(
