@@ -71,6 +71,35 @@ class _WebViewScreenState extends State<WebViewScreen> {
     }
   }
 
+  InAppWebViewSettings get _webViewSettings {
+    return InAppWebViewSettings(
+      // 성능 최적화 설정
+      transparentBackground: true,
+      javaScriptEnabled: true,
+      domStorageEnabled: true,
+      databaseEnabled: true,
+      clearCache: false,
+      cacheEnabled: true,
+      // 로딩 최적화
+      useOnLoadResource: false,
+      useShouldOverrideUrlLoading: true,
+      useOnDownloadStart: false,
+      // 렌더링 최적화
+      hardwareAcceleration: true,
+      // window.open 최적화
+      supportMultipleWindows: true,
+      javaScriptCanOpenWindowsAutomatically: true,
+      // 유저 에이전트 설정
+      userAgent:
+          "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+      // 추가 성능 설정
+      mediaPlaybackRequiresUserGesture: false,
+      allowsInlineMediaPlayback: true,
+      iframeAllow: "camera; microphone",
+      iframeAllowFullscreen: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
@@ -117,32 +146,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
             children: [
               Expanded(
                 child: InAppWebView(
-                  initialSettings: InAppWebViewSettings(
-                    // 성능 최적화 설정
-                    transparentBackground: true,
-                    javaScriptEnabled: true,
-                    domStorageEnabled: true,
-                    databaseEnabled: true,
-                    clearCache: false,
-                    cacheEnabled: true,
-                    // 로딩 최적화
-                    useOnLoadResource: false,
-                    useShouldOverrideUrlLoading: true,
-                    useOnDownloadStart: false,
-                    // 렌더링 최적화
-                    hardwareAcceleration: true,
-                    // window.open 최적화
-                    supportMultipleWindows: true,
-                    javaScriptCanOpenWindowsAutomatically: true,
-                    // 유저 에이전트 설정
-                    userAgent:
-                        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-                    // 추가 성능 설정
-                    mediaPlaybackRequiresUserGesture: false,
-                    allowsInlineMediaPlayback: true,
-                    iframeAllow: "camera; microphone",
-                    iframeAllowFullscreen: true,
-                  ),
+                  initialSettings: _webViewSettings,
                   key: webViewKey,
                   initialUrlRequest: URLRequest(
                     url: WebUri(_webUrlWithLocation),
