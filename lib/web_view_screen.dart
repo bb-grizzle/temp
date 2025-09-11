@@ -76,7 +76,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
     if (isLoading) {
       return Scaffold(
-        backgroundColor: Color(0xFF2B2B2B),
+        backgroundColor: bgColor,
         body: SafeArea(
           child: Column(
             children: [
