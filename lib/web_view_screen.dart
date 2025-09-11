@@ -89,9 +89,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color(0xFF5AFF61),
-                        ),
+                        valueColor: AlwaysStoppedAnimation<Color>(mainGreen),
                       ),
                       SizedBox(height: 20),
                       Text(
