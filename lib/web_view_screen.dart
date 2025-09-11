@@ -1,4 +1,5 @@
 import 'package:every_football/data/const.dart';
+import 'package:every_football/components/app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -80,22 +81,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
           child: Column(
             children: [
               // 상단 헤더
-              Container(
-                height: 48,
-                width: double.infinity,
-                color: Color(0xFF2B2B2B),
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Image.asset(
-                      'assets/logo/logo-title.png',
-                      height: 32,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ),
+              AppHeader(),
               // 로딩 컨텐츠
               Expanded(
                 child: Center(
@@ -137,7 +123,9 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   initialUrlRequest: URLRequest(
                     url: WebUri(_webUrlWithLocation),
                   ),
-                  shouldOverrideUrlLoading: (controller, navigationAction) async => NavigationActionPolicy.ALLOW,
+                  shouldOverrideUrlLoading:
+                      (controller, navigationAction) async =>
+                          NavigationActionPolicy.ALLOW,
                 ),
               ),
               Container(
