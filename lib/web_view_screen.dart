@@ -1,5 +1,6 @@
 import 'package:every_football/data/const.dart';
 import 'package:every_football/components/app_header.dart';
+import 'package:every_football/components/new_window_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -164,10 +165,12 @@ class _WebViewScreenState extends State<WebViewScreen> {
                     // 로딩 완료 시 추가 처리 없음
                   },
                   onCreateWindow: (controller, createWindowAction) async {
-                    // window.open 이벤트 처리 - 새 창을 현재 WebView에서 열기
-                    await controller.loadUrl(
-                      urlRequest: URLRequest(
-                        url: createWindowAction.request.url,
+                    // window.open 이벤트 처리 - 새 창을 새로운 WebView에서 열기
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => NewWindowWebView(
+                          url: createWindowAction.request.url?.toString() ?? '',
+                        ),
                       ),
                     );
                     return true;
