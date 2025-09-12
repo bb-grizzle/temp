@@ -210,7 +210,7 @@ class _NewWindowWebViewState extends State<NewWindowWebView>
               ),
               child: FloatingActionButton(
                 onPressed: () => Navigator.of(context).pop(),
-                backgroundColor: bgColor,
+                backgroundColor: bgColor.withOpacity(0.8),
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
