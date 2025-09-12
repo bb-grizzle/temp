@@ -21,6 +21,7 @@ class _WebViewScreenState extends State<WebViewScreen>
   Position? position;
   bool locationPermissionGranted = false;
   bool isLoading = true;
+  bool isWebViewLoading = true;
   String? _currentUrl;
 
   @override
@@ -68,6 +69,9 @@ class _WebViewScreenState extends State<WebViewScreen>
         if (currentUrl == null || currentUrl.toString().isEmpty) {
           // WebView가 비어있으면 다시 로드
           print('WebView 복구: URL 재로드');
+          setState(() {
+            isWebViewLoading = true;
+          });
           await webViewController!.loadUrl(
             urlRequest: URLRequest(
               url: WebUri(_currentUrl ?? _webUrlWithLocation),
@@ -80,6 +84,7 @@ class _WebViewScreenState extends State<WebViewScreen>
         setState(() {
           // WebView를 강제로 재생성하기 위해 key 변경
           webViewKey = GlobalKey();
+          isWebViewLoading = true;
         });
       }
     }
@@ -204,36 +209,83 @@ class _WebViewScreenState extends State<WebViewScreen>
           child: Column(
             children: [
               Expanded(
-                child: InAppWebView(
-                  initialSettings: _webViewSettings,
-                  key: webViewKey,
-                  initialUrlRequest: URLRequest(
-                    url: WebUri(_webUrlWithLocation),
-                  ),
-                  onWebViewCreated: (controller) {
-                    webViewController = controller;
-                  },
-                  shouldOverrideUrlLoading:
-                      (controller, navigationAction) async =>
-                          NavigationActionPolicy.ALLOW,
-                  onLoadStart: (controller, url) {
-                    // 로딩 시작 시 추가 처리 없음
-                  },
-                  onLoadStop: (controller, url) {
-                    // 로딩 완료 시 현재 URL 저장
-                    _currentUrl = url?.toString();
-                  },
-                  onCreateWindow: (controller, createWindowAction) async {
-                    // window.open 이벤트 처리 - 새 창을 새로운 WebView에서 열기
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => NewWindowWebView(
-                          url: createWindowAction.request.url?.toString() ?? '',
+                child: Stack(
+                  children: [
+                    InAppWebView(
+                      initialSettings: _webViewSettings,
+                      key: webViewKey,
+                      initialUrlRequest: URLRequest(
+                        url: WebUri(_webUrlWithLocation),
+                      ),
+                      onWebViewCreated: (controller) {
+                        webViewController = controller;
+                      },
+                      shouldOverrideUrlLoading:
+                          (controller, navigationAction) async =>
+                              NavigationActionPolicy.ALLOW,
+                      onLoadStart: (controller, url) {
+                        // WebView 로딩 시작
+                        setState(() {
+                          isWebViewLoading = true;
+                        });
+                      },
+                      onLoadStop: (controller, url) {
+                        // WebView 로딩 완료
+                        setState(() {
+                          isWebViewLoading = false;
+                        });
+                        // 현재 URL 저장
+                        _currentUrl = url?.toString();
+                      },
+                      onCreateWindow: (controller, createWindowAction) async {
+                        // window.open 이벤트 처리 - 새 창을 새로운 WebView에서 열기
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => NewWindowWebView(
+                              url:
+                                  createWindowAction.request.url?.toString() ??
+                                  '',
+                            ),
+                          ),
+                        );
+                        return true;
+                      },
+                    ),
+                    // WebView 로딩 화면
+                    if (isWebViewLoading)
+                      Container(
+                        color: bgColor,
+                        child: Column(
+                          children: [
+                            // AppHeader 추가
+                            AppHeader(),
+                            // 로딩 컨텐츠
+                            Expanded(
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        mainGreen,
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text(
+                                      '로딩 중...',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                    return true;
-                  },
+                  ],
                 ),
               ),
               Container(
