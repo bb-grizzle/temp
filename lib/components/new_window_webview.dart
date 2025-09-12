@@ -13,16 +13,73 @@ class NewWindowWebView extends StatefulWidget {
   State<NewWindowWebView> createState() => _NewWindowWebViewState();
 }
 
-class _NewWindowWebViewState extends State<NewWindowWebView> {
-  final GlobalKey webViewKey = GlobalKey();
+class _NewWindowWebViewState extends State<NewWindowWebView>
+    with WidgetsBindingObserver {
+  GlobalKey webViewKey = GlobalKey();
   InAppWebViewController? webViewController;
   bool isLoading = true;
   bool canGoBack = false;
   bool canGoForward = false;
+  String? _currentUrl;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _currentUrl = widget.url;
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      // 앱이 포그라운드로 돌아왔을 때 WebView 상태 확인 및 복구
+      _handleAppResumed();
+    } else if (state == AppLifecycleState.paused) {
+      // 앱이 백그라운드로 갈 때 현재 URL 저장
+      _saveCurrentUrl();
+    }
+  }
+
+  void _saveCurrentUrl() async {
+    if (webViewController != null) {
+      try {
+        final url = await webViewController!.getUrl();
+        _currentUrl = url?.toString();
+      } catch (e) {
+        print('URL 저장 실패: $e');
+      }
+    }
+  }
+
+  void _handleAppResumed() async {
+    if (webViewController != null) {
+      try {
+        // WebView가 여전히 유효한지 확인
+        final currentUrl = await webViewController!.getUrl();
+        if (currentUrl == null || currentUrl.toString().isEmpty) {
+          // WebView가 비어있으면 다시 로드
+          print('NewWindow WebView 복구: URL 재로드');
+          await webViewController!.loadUrl(
+            urlRequest: URLRequest(url: WebUri(_currentUrl ?? widget.url)),
+          );
+        }
+      } catch (e) {
+        // WebView 오류 발생 시 재생성
+        print('NewWindow WebView 오류 감지, 재생성: $e');
+        setState(() {
+          // WebView를 강제로 재생성하기 위해 key 변경
+          webViewKey = GlobalKey();
+        });
+      }
+    }
   }
 
   InAppWebViewSettings get _webViewSettings {
@@ -90,6 +147,9 @@ class _NewWindowWebViewState extends State<NewWindowWebView> {
                           setState(() {
                             isLoading = false;
                           });
+
+                          // 현재 URL 저장
+                          _currentUrl = url?.toString();
 
                           // 뒤로가기/앞으로가기 버튼 상태 업데이트
                           final canBack = await controller.canGoBack();
