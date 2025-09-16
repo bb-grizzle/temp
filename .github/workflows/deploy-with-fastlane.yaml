@@ -39,10 +39,8 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Pub Get Packages
-        run: flutter pub get
-      - name: build flutter ios app
-        run: flutter build ipa
+      - name: Install Pod
+        run: cd ios && pod install --repo-update --clean-install && cd ..
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
