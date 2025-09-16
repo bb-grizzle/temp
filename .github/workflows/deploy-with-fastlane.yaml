@@ -30,6 +30,9 @@ jobs:
           bundler-cache: true
           working-directory: "ios"
 
+      - name: Install CocoaPods
+        run: gem install cocoapods
+
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v2.16.0
         with:
@@ -42,8 +45,13 @@ jobs:
       - name: install flutter
         run: flutter pub get
 
-      - name: Install Pod
-        run: cd ios && pod install --repo-update --clean-install && cd ..
+      - name: Install Pods
+        run: |
+          cd ios
+          pod install
+
+      # - name: Install Pod
+      #   run: cd ios && pod install --repo-update --clean-install && cd ..
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
