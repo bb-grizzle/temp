@@ -39,7 +39,10 @@ jobs:
           channel: stable
           cache: true
 
-      # maybe.. need to build
+      - name: Pub Get Packages
+        run: flutter pub get
+      - name: build flutter ios app
+        run: flutter build ipa
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
