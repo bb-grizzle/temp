@@ -30,14 +30,11 @@ jobs:
           bundler-cache: true
           working-directory: "ios"
 
-      - name: Run Flutter tasks
-        uses: subosito/flutter-action@v2.16.0
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          # Remember to specify flutter version in pubspec.yaml under environment
-          # https://github.com/subosito/flutter-action?tab=readme-ov-file#use-version-from-pubspecyaml
-          flutter-version-file: "pubspec.yaml"
-          channel: ${{ env.FLUTTER_CHANNEL }}
-          cache: true
+          channel: stable
+          flutter-version-file: pubspec.yaml
 
       # maybe.. need to build
 
